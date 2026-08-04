@@ -26,7 +26,6 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->brandLogo('/asset/images/logo.png')
-           // ->brandLogo(fn () => view('filament.admin.logo'))
         ->brandLogoHeight('5rem')
              ->favicon('/asset/images/logo.png')
 
@@ -35,7 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Green                                           ,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
