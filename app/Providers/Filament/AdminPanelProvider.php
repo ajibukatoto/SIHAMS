@@ -26,6 +26,8 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->brandLogo('/asset/images/logo.png')
+           // ->brandLogo(fn () => view('filament.admin.logo'))
+        ->brandLogoHeight('5rem')
              ->favicon('/asset/images/logo.png')
 
            ->sidebarFullyCollapsibleOnDesktop()
