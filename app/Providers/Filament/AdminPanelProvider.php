@@ -29,10 +29,15 @@ class AdminPanelProvider extends PanelProvider
         ->brandLogoHeight('5rem')
              ->favicon('/asset/images/logo.png')
 
-           ->sidebarFullyCollapsibleOnDesktop()
-            ->id('admin')
-            ->path('admin')
-            ->login()
+        ->sidebarFullyCollapsibleOnDesktop()
+        ->id('admin')
+        ->path('admin')
+        ->login()
+        ->registration()
+        ->passwordReset()
+        ->emailVerification()
+        ->emailChangeVerification()
+        ->profile()
             ->colors([
                 'primary' => Color::Green                                           ,
             ])
