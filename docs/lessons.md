@@ -13,5 +13,18 @@ Objectives
 - Create Department CRUD
 
 Status
+complete
 
-In Progress
+Topic:
+Office MOodule
+ 
+ Objectives
+
+- Learn Laravel Migration
+- Learn Laravel Model
+- Learn Filament Resource
+- Create Office CRUD
+
+status
+
+progress

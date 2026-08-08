@@ -3,13 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Department extends Model
 {
-    protected $fillable = [
+     protected $fillable = [
         'name',
         'code',
         'description',
         'is_active',
-    ];  
+    ];
+
+public function offices(): HasMany
+    {
+        return $this->hasMany(Office::class);
+    }
 }
