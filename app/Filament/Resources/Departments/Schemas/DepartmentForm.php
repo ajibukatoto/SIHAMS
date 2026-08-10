@@ -28,7 +28,7 @@ class DepartmentForm
                 Toggle::make('is_active')
                     ->label('Is Active')
                     ->default(true),
-                    
+
             ]);
     }
 }
