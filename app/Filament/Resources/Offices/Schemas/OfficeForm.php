@@ -15,10 +15,8 @@ class OfficeForm
         return $schema
             ->components([
                 Select::make('department_id')
+                    ->relationship('department', 'name')
                     ->label('Department')
-                    ->options(Department::pluck('name', 'id'))
-                    ->searchable()
-                    ->preload()
                     ->required(),
 
                 TextInput::make('office_name')
