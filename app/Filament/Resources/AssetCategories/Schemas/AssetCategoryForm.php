@@ -26,7 +26,7 @@ class AssetCategoryForm
                     ->rows(3)
                     ->columnSpanFull(),
                 Toggle::make('is_active')
-                    ->label('Is tive')
+                    ->label('Is Active')
                     ->default(true),
 
             ]);
