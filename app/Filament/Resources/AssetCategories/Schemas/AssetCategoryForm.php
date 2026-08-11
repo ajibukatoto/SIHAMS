@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\AssetCategories\Schemas;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-
+use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
 
 class AssetCategoryForm
@@ -13,18 +13,20 @@ class AssetCategoryForm
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->label('Name')
+                    ->label('Category Name')
                     ->required()
                     ->maxLength(255),
                 TextInput::make('code')
-                    ->label('Code')
+                    ->label('Category Code')
                     ->required()
-                    ->maxLength(255),
-                TextInput::make('description')
+                    ->unique(ignoreRecord: true)
+                    ->maxLength(20),
+                Textarea::make('description')
                     ->label('Description')
-                    ->maxLength(255),
+                    ->rows(3)
+                    ->columnSpanFull(),
                 Toggle::make('is_active')
-                    ->label('Is Active')
+                    ->label('Is tive')
                     ->default(true),
 
             ]);
