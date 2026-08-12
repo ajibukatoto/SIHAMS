@@ -25,6 +25,7 @@ class DepartmentResource extends Resource
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema
+    
     {
         return DepartmentForm::configure($schema);
     }
