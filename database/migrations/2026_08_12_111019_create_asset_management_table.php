@@ -13,6 +13,18 @@ return new class extends Migration
     {
         Schema::create('asset_management', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('asset_id')->constrained('assets')->onDelete('cascade');
+            $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
+            $table->foreignId('assigned_by')->constrained('users')->onDelete('cascade');
+            $table->date('assigned_date');
+            $table->date('expected_return_date')->nullable();
+            $table->date('actual_return_date')->nullable();
+            $table->string('condition_when_assigned')->nullable();
+            $table->string('condition_when_returned')->nullable();
+            $table->text('remarks')->nullable();
+
+
+
             $table->timestamps();
         });
     }
