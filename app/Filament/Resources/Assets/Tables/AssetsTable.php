@@ -19,28 +19,35 @@ class AssetsTable
                     ->label('Asset Name')
                     ->sortable()
                     ->searchable(),
+
                 TextColumn::make('code')
                     ->label('Asset Code')
                     ->sortable()
                     ->searchable(),
+
                 TextColumn::make('description')
                     ->label('Description')
-                    ->sortable()
-                    ->searchable(),
+                    ->limit(50)
+                    ->toggleable(),
+
                 TextColumn::make('assetCategory.name')
                     ->label('Asset Category')
                     ->sortable()
                     ->searchable(),
+
                 ToggleColumn::make('is_active')
                     ->label('Is Active')
                     ->sortable(),
             ])
+
             ->filters([
                 //
             ])
+
             ->recordActions([
                 EditAction::make(),
             ])
+
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

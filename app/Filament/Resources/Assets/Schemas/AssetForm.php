@@ -14,10 +14,12 @@ class AssetForm
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->label('Asset Name')
-                    ->required()
-                    ->maxLength(255),
+              select::make('asset_id')
+    ->label('Asset')
+    ->relationship('asset', 'name')
+    ->searchable()
+    ->preload()
+    ->required(),
                 TextInput::make('code')
                     ->label('Asset Code')
                     ->required()
