@@ -18,9 +18,7 @@ class AssetMaintenanceResource extends Resource
 {
     protected static ?string $model = AssetMaintenance::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-
-    protected static ?string $recordTitleAttribute = 'name';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedWrenchScrewdriver;
 
     public static function form(Schema $schema): Schema
     {
@@ -48,3 +46,4 @@ class AssetMaintenanceResource extends Resource
         ];
     }
 }
+
