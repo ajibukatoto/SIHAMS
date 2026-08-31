@@ -1,4 +1,3 @@
-```php
 <?php
 
 namespace App\Filament\Resources\AssetMaintenances\Schemas;
@@ -29,13 +28,14 @@ class AssetMaintenanceForm
                     ->preload()
                     ->required(),
 
-                TextInput::make('title')
-                    ->label('Maintenance Title')
+                TextInput::make('maintenance_type')
+                    ->label('Maintenance Type')
                     ->required()
                     ->maxLength(255),
 
-                Textarea::make('description')
-                    ->label('Description')
+                Textarea::make('problem_description')
+                    ->label('Problem Description')
+                    ->required()
                     ->rows(4)
                     ->columnSpanFull(),
 
@@ -43,20 +43,33 @@ class AssetMaintenanceForm
                     ->label('Maintenance Date')
                     ->required(),
 
+                DatePicker::make('completion_date')
+                    ->label('Completion Date'),
+
+                Select::make('status')
+                    ->label('Status')
+                    ->options([
+                        'pending' => 'Pending',
+                        'in_progress' => 'In Progress',
+                        'completed' => 'Completed',
+                        'cancelled' => 'Cancelled',
+                    ])
+                    ->default('pending')
+                    ->required(),
+
+                TextInput::make('technician')
+                    ->label('Technician')
+                    ->maxLength(255),
+
                 TextInput::make('cost')
                     ->label('Cost')
                     ->numeric()
                     ->prefix('TZS'),
 
-                Select::make('status')
-                    ->options([
-                        'pending' => 'Pending',
-                        'in_progress' => 'In Progress',
-                        'completed' => 'Completed',
-                    ])
-                    ->default('pending')
-                    ->required(),
+                Textarea::make('remarks')
+                    ->label('Remarks')
+                    ->rows(3)
+                    ->columnSpanFull(),
             ]);
     }
 }
-```
