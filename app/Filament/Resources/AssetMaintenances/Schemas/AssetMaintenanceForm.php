@@ -1,7 +1,12 @@
+```php
 <?php
 
 namespace App\Filament\Resources\AssetMaintenances\Schemas;
 
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class AssetMaintenanceForm
@@ -10,11 +15,48 @@ class AssetMaintenanceForm
     {
         return $schema
             ->components([
-<<<<<<< HEAD
-                
-=======
-                //
->>>>>>> aac7d470a762c10f396eccf79a70bf81394b1bfd
+                Select::make('asset_id')
+                    ->label('Asset')
+                    ->relationship('asset', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
+
+                Select::make('reported_by')
+                    ->label('Reported By')
+                    ->relationship('reportedBy', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
+
+                TextInput::make('title')
+                    ->label('Maintenance Title')
+                    ->required()
+                    ->maxLength(255),
+
+                Textarea::make('description')
+                    ->label('Description')
+                    ->rows(4)
+                    ->columnSpanFull(),
+
+                DatePicker::make('maintenance_date')
+                    ->label('Maintenance Date')
+                    ->required(),
+
+                TextInput::make('cost')
+                    ->label('Cost')
+                    ->numeric()
+                    ->prefix('TZS'),
+
+                Select::make('status')
+                    ->options([
+                        'pending' => 'Pending',
+                        'in_progress' => 'In Progress',
+                        'completed' => 'Completed',
+                    ])
+                    ->default('pending')
+                    ->required(),
             ]);
     }
 }
+```
