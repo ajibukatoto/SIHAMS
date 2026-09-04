@@ -6,20 +6,32 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('ticket_comments', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('help_desk_ticket_id')
+                ->constrained('help_desk_tickets')
+                ->cascadeOnDelete();
+
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->restrictOnDelete();
+
+            $table->text('comment');
+
+            $table->boolean('is_internal')->default(false);
+
             $table->timestamps();
+
+            $table->index([
+                'help_desk_ticket_id',
+                'created_at',
+            ]);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('ticket_comments');
