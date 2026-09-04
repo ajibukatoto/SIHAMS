@@ -18,9 +18,9 @@ class TicketCommentResource extends Resource
 {
     protected static ?string $model = TicketComment::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::ChatBubbleLeftRight;
 
-    protected static ?string $recordTitleAttribute = 'name';
+    protected static ?string $recordTitleAttribute = 'comment';
 
     public static function form(Schema $schema): Schema
     {
