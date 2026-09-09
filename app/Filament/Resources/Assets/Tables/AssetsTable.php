@@ -8,6 +8,7 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class AssetsTable
 {
@@ -37,7 +38,11 @@ class AssetsTable
 
                 ToggleColumn::make('is_active')
                     ->label('Is Active')
-                    ->sortable(),
+                    ->sortable()
+                    ->disabled(
+                        fn (): bool =>
+                            ! (Auth::user()?->can('assets.update') ?? false)
+                    ),
             ])
 
             ->filters([
@@ -45,12 +50,20 @@ class AssetsTable
             ])
 
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->visible(
+                        fn (): bool =>
+                            Auth::user()?->can('assets.update') ?? false
+                    ),
             ])
 
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->visible(
+                            fn (): bool =>
+                                Auth::user()?->can('assets.delete') ?? false
+                        ),
                 ]),
             ]);
     }
