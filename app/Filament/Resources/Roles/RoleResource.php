@@ -13,7 +13,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Spatie\Permission\Models\Role;
-
+use UnitEnum;
 class RoleResource extends Resource
 {
     protected static ?string $model = Role::class;
@@ -21,6 +21,8 @@ class RoleResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ShieldCheck;
 
     protected static ?string $recordTitleAttribute = 'name';
+    protected static string|UnitEnum|null $navigationGroup = 'Security & Access';
+protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {
