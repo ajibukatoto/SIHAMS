@@ -11,7 +11,7 @@ use App\Models\HelpDeskTicket;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-
+use UnitEnum;
 class HelpDeskTicketResource extends Resource
 {
     protected static ?string $model = HelpDeskTicket::class;
@@ -23,6 +23,8 @@ class HelpDeskTicketResource extends Resource
     protected static ?string $modelLabel = 'Help Desk Ticket';
 
     protected static ?string $pluralModelLabel = 'Help Desk Tickets';
+    protected static string|UnitEnum|null $navigationGroup = 'Help Desk';
+protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {
