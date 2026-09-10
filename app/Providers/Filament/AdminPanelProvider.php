@@ -25,12 +25,12 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
         ->navigationGroups([
-    'Administration',
-    'Asset Management',
-    'Help Desk',
-    'Security & Access',
-    'Reports',
-    'System',
+           'Administration',
+           'Asset Management',
+           'Help Desk',
+           'Security & Access',
+           'Reports',
+           'System',
 ])
             ->default()
             ->brandLogo('/asset/images/logo.png')
