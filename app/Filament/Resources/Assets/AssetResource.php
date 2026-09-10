@@ -13,7 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-
+use UnitEnum;
 class AssetResource extends Resource
 {
     protected static ?string $model = Asset::class;
@@ -21,6 +21,8 @@ class AssetResource extends Resource
    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedComputerDesktop;
 
     protected static ?string $recordTitleAttribute = 'name';
+    protected static string|UnitEnum|null $navigationGroup = 'Asset Management';
+protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {
