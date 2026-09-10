@@ -24,6 +24,14 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+        ->navigationGroups([
+    'Administration',
+    'Asset Management',
+    'Help Desk',
+    'Security & Access',
+    'Reports',
+    'System',
+])
             ->default()
             ->brandLogo('/asset/images/logo.png')
         ->brandLogoHeight('4rem')
