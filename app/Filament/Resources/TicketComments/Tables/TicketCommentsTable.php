@@ -15,7 +15,7 @@ class TicketCommentsTable
     {
         return $table
             ->columns([
-                TextColumn::make('helpDeskTicket.ticket_number')
+                TextColumn::make('ticket.ticket_number')
                     ->label('Ticket Number')
                     ->searchable()
                     ->sortable(),
