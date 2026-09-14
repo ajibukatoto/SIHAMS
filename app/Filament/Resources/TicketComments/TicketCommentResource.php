@@ -13,7 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-
+use UnitEnum;
 class TicketCommentResource extends Resource
 {
     protected static ?string $model = TicketComment::class;
@@ -21,6 +21,9 @@ class TicketCommentResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ChatBubbleLeftRight;
 
     protected static ?string $recordTitleAttribute = 'comment';
+    protected static string|UnitEnum|null $navigationGroup = 'Help Desk';
+
+protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {
