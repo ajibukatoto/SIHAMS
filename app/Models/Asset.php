@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Asset extends Model
 {
@@ -14,7 +15,7 @@ class Asset extends Model
         'is_active',
     ];
 
-    public function assetCategory()
+    public function assetCategory(): BelongsTo
     {
         return $this->belongsTo(AssetCategory::class);
     }

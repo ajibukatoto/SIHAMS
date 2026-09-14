@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class HelpDeskTicket extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'ticket_number',
         'requester_id',
@@ -35,26 +38,41 @@ class HelpDeskTicket extends Model
 
     public function requester(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'requester_id');
+        return $this->belongsTo(
+            User::class,
+            'requester_id'
+        );
     }
 
     public function technician(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'assigned_to');
+        return $this->belongsTo(
+            User::class,
+            'assigned_to'
+        );
     }
 
     public function department(): BelongsTo
     {
-        return $this->belongsTo(Department::class);
+        return $this->belongsTo(
+            Department::class,
+            'department_id'
+        );
     }
 
     public function office(): BelongsTo
     {
-        return $this->belongsTo(Office::class);
+        return $this->belongsTo(
+            Office::class,
+            'office_id'
+        );
     }
 
     public function comments(): HasMany
     {
-        return $this->hasMany(TicketComment::class);
+        return $this->hasMany(
+            TicketComment::class,
+            'help_desk_ticket_id'
+        );
     }
 }
