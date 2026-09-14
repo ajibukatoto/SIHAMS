@@ -2,9 +2,6 @@
 
 namespace App\Filament\Resources\HelpDeskTickets\Schemas;
 
-use App\Models\Department;
-use App\Models\Office;
-use App\Models\User;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -18,11 +15,13 @@ class HelpDeskTicketForm
         return $schema
             ->components([
                 Section::make('Ticket Information')
+                    ->description('Enter the details of the ICT problem or service request.')
                     ->schema([
                         TextInput::make('ticket_number')
                             ->label('Ticket Number')
                             ->disabled()
-                            ->dehydrated(false),
+                            ->dehydrated(false)
+                            ->placeholder('Generated automatically'),
 
                         TextInput::make('subject')
                             ->label('Subject')
@@ -58,7 +57,7 @@ class HelpDeskTicketForm
                         Textarea::make('description')
                             ->label('Problem Description')
                             ->required()
-                            ->rows(5)
+                            ->rows(6)
                             ->columnSpanFull(),
                     ])
                     ->columns(2),
@@ -70,7 +69,9 @@ class HelpDeskTicketForm
                             ->relationship('requester', 'name')
                             ->searchable()
                             ->preload()
-                            ->required(),
+                            ->required()
+                            ->disabled()
+                            ->dehydrated(),
 
                         Select::make('department_id')
                             ->label('Department')
@@ -89,36 +90,40 @@ class HelpDeskTicketForm
                     ->columns(3),
 
                 Section::make('Assignment')
+                    ->description('Assignment and ticket status are controlled by the Help Desk workflow.')
                     ->schema([
-                        Select::make('assigned_to')
+                        TextInput::make('assigned_to_display')
                             ->label('Assigned Technician')
-                            ->relationship('technician', 'name')
-                            ->searchable()
-                            ->preload(),
+                            ->formatStateUsing(function ($record) {
+                                return $record?->technician?->name ?? 'Unassigned';
+                            })
+                            ->disabled()
+                            ->dehydrated(false),
 
-                        Select::make('status')
-                            ->label('Status')
-                            ->options([
-                                'open' => 'Open',
-                                'assigned' => 'Assigned',
-                                'in_progress' => 'In Progress',
-                                'pending' => 'Pending',
-                                'resolved' => 'Resolved',
-                                'closed' => 'Closed',
-                                'cancelled' => 'Cancelled',
-                            ])
-                            ->default('open')
-                            ->required(),
+                        TextInput::make('status_display')
+                            ->label('Current Status')
+                            ->formatStateUsing(function ($record) {
+                                return $record
+                                    ? str($record->status)
+                                        ->replace('_', ' ')
+                                        ->title()
+                                    : 'Open';
+                            })
+                            ->disabled()
+                            ->dehydrated(false),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->visibleOn('edit'),
 
                 Section::make('Resolution')
                     ->schema([
                         Textarea::make('resolution')
                             ->label('Resolution / Work Done')
                             ->rows(5)
-                            ->columnSpanFull(),
-                    ]),
+                            ->disabled()
+                            ->dehydrated(false),
+                    ])
+                    ->visibleOn('edit'),
             ]);
     }
 }
