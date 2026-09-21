@@ -14,9 +14,17 @@ class HelpDeskTicketForm
     {
         return $schema
             ->components([
+
+                /*
+                |--------------------------------------------------------------------------
+                | Ticket Information
+                |--------------------------------------------------------------------------
+                */
+
                 Section::make('Ticket Information')
-                    ->description('Enter the details of the ICT problem or service request.')
+                    ->description('Provide details about the ICT problem or service request.')
                     ->schema([
+
                         TextInput::make('ticket_number')
                             ->label('Ticket Number')
                             ->disabled()
@@ -26,7 +34,8 @@ class HelpDeskTicketForm
                         TextInput::make('subject')
                             ->label('Subject')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->placeholder('e.g. Computer cannot connect to the network'),
 
                         Select::make('category')
                             ->label('Category')
@@ -58,20 +67,29 @@ class HelpDeskTicketForm
                             ->label('Problem Description')
                             ->required()
                             ->rows(6)
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->placeholder(
+                                'Describe the problem, error message, affected equipment, or service required.'
+                            ),
                     ])
                     ->columns(2),
 
+                /*
+                |--------------------------------------------------------------------------
+                | Requester Information
+                |--------------------------------------------------------------------------
+                */
+
                 Section::make('Requester Information')
+                    ->description('Information about the employee reporting the issue.')
                     ->schema([
+
                         Select::make('requester_id')
                             ->label('Requester')
                             ->relationship('requester', 'name')
                             ->searchable()
                             ->preload()
-                            ->required()
-                            ->disabled()
-                            ->dehydrated(),
+                            ->required(),
 
                         Select::make('department_id')
                             ->label('Department')
@@ -82,48 +100,64 @@ class HelpDeskTicketForm
 
                         Select::make('office_id')
                             ->label('Office')
-                            ->relationship('office', 'name')
+                            ->relationship('office', 'office_name')
                             ->searchable()
                             ->preload()
                             ->required(),
                     ])
                     ->columns(3),
 
-                Section::make('Assignment')
-                    ->description('Assignment and ticket status are controlled by the Help Desk workflow.')
-                    ->schema([
-                        TextInput::make('assigned_to_display')
-                            ->label('Assigned Technician')
-                            ->formatStateUsing(function ($record) {
-                                return $record?->technician?->name ?? 'Unassigned';
-                            })
-                            ->disabled()
-                            ->dehydrated(false),
+                /*
+                |--------------------------------------------------------------------------
+                | Assignment
+                |--------------------------------------------------------------------------
+                */
 
-                        TextInput::make('status_display')
-                            ->label('Current Status')
-                            ->formatStateUsing(function ($record) {
-                                return $record
-                                    ? str($record->status)
-                                        ->replace('_', ' ')
-                                        ->title()
-                                    : 'Open';
-                            })
-                            ->disabled()
-                            ->dehydrated(false),
+                Section::make('Assignment')
+                    ->description('Ticket assignment and current workflow status.')
+                    ->schema([
+
+                        Select::make('assigned_to')
+                            ->label('Assigned Technician')
+                            ->relationship('technician', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->placeholder('Not assigned'),
+
+                        Select::make('status')
+                            ->label('Status')
+                            ->options([
+                                'open' => 'Open',
+                                'assigned' => 'Assigned',
+                                'in_progress' => 'In Progress',
+                                'pending' => 'Pending',
+                                'resolved' => 'Resolved',
+                                'closed' => 'Closed',
+                                'cancelled' => 'Cancelled',
+                            ])
+                            ->default('open')
+                            ->required(),
                     ])
-                    ->columns(2)
-                    ->visibleOn('edit'),
+                    ->columns(2),
+
+                /*
+                |--------------------------------------------------------------------------
+                | Resolution
+                |--------------------------------------------------------------------------
+                */
 
                 Section::make('Resolution')
+                    ->description('Record the work performed and final resolution.')
                     ->schema([
+
                         Textarea::make('resolution')
                             ->label('Resolution / Work Done')
-                            ->rows(5)
-                            ->disabled()
-                            ->dehydrated(false),
-                    ])
-                    ->visibleOn('edit'),
+                            ->rows(6)
+                            ->columnSpanFull()
+                            ->placeholder(
+                                'Describe the troubleshooting steps, action taken, and final resolution.'
+                            ),
+                    ]),
             ]);
     }
 }

@@ -15,6 +15,7 @@ class TicketCommentsTable
     {
         return $table
             ->columns([
+
                 TextColumn::make('ticket.ticket_number')
                     ->label('Ticket Number')
                     ->searchable()
@@ -45,17 +46,21 @@ class TicketCommentsTable
                     ->dateTime()
                     ->sortable(),
             ])
+
             ->filters([
                 //
             ])
+
             ->recordActions([
                 EditAction::make(),
             ])
+
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
             ])
+
             ->defaultSort('created_at', 'desc');
     }
 }
