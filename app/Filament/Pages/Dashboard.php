@@ -14,22 +14,15 @@ class Dashboard extends BaseDashboard
 {
     protected static ?string $title = 'SIHAMS Dashboard';
 
-    public function getHeaderWidgets(): array
+    public function getWidgets(): array
     {
         return [
             DashboardWelcome::class,
             HelpDeskStats::class,
             TicketActivityChart::class,
             TicketStatusChart::class,
-        ];
-    }
-
-    public function getFooterWidgets(): array
-    {
-        return [
             RecentTickets::class,
             SystemOverview::class,
         ];
     }
 }
-
