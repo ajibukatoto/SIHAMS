@@ -9,9 +9,26 @@ class CreateUser extends CreateRecord
 {
     protected static string $resource = UserResource::class;
 
-    /**
-     * Redirect to the users list after creating a user.
-     */
+    protected ?string $selectedRole = null;
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $this->selectedRole = $data['role'] ?? null;
+
+        unset($data['role']);
+
+        return $data;
+    }
+
+    protected function afterCreate(): void
+    {
+        if ($this->selectedRole) {
+            $this->record->syncRoles([
+                $this->selectedRole,
+            ]);
+        }
+    }
+
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
