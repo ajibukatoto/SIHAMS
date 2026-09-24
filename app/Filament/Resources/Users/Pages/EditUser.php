@@ -9,9 +9,35 @@ class EditUser extends EditRecord
 {
     protected static string $resource = UserResource::class;
 
-    /**
-     * Redirect to the users list after updating a user.
-     */
+    protected ?string $selectedRole = null;
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $data['role'] = $this->record
+            ->getRoleNames()
+            ->first();
+
+        return $data;
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $this->selectedRole = $data['role'] ?? null;
+
+        unset($data['role']);
+
+        return $data;
+    }
+
+    protected function afterSave(): void
+    {
+        if ($this->selectedRole) {
+            $this->record->syncRoles([
+                $this->selectedRole,
+            ]);
+        }
+    }
+
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
