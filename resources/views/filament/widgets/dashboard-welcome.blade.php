@@ -7,11 +7,23 @@
                 Smart ICT Helpdesk and Management System
             </p>
 
-            <h1 class="mt-2 text-2xl font-bold tracking-tight text-gray-950 dark:text-white sm:text-3xl">
+            <h1
+                class="mt-2 text-2xl font-bold tracking-tight text-gray-950 dark:text-white sm:text-3xl"
+            >
                 Welcome back, {{ auth()->user()?->name ?? 'User' }} 👋
             </h1>
 
-            <p class="mt-2 max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-400">
+            <div class="mt-3">
+                <span
+                    class="inline-flex items-center rounded-full bg-primary-50 px-3 py-1 text-sm font-semibold text-primary-700 dark:bg-primary-500/10 dark:text-primary-400"
+                >
+                    {{ auth()->user()?->getRoleNames()->first() ?? 'No Role Assigned' }}
+                </span>
+            </div>
+
+            <p
+                class="mt-3 max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-400"
+            >
                 Monitor ICT support services, help desk tickets, assets,
                 users and system activity from one central dashboard.
             </p>
