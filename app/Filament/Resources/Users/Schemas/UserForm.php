@@ -6,6 +6,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Spatie\Permission\Models\Role;
 
 class UserForm
 {
@@ -14,7 +15,9 @@ class UserForm
         return $schema
             ->components([
                 Section::make('User Account Information')
-                    ->description('Create and manage system user accounts and their assigned roles.')
+                    ->description(
+                        'Create and manage system user accounts and their assigned role.'
+                    )
                     ->schema([
                         TextInput::make('name')
                             ->label('Full Name')
@@ -28,14 +31,21 @@ class UserForm
                             ->unique(ignoreRecord: true)
                             ->maxLength(255),
 
-                        Select::make('roles')
+                        Select::make('role')
                             ->label('Role')
-                            ->relationship('roles', 'name')
+                            ->options(
+                                Role::query()
+                                    ->where('guard_name', 'web')
+                                    ->orderBy('name')
+                                    ->pluck('name', 'name')
+                                    ->toArray()
+                            )
                             ->searchable()
                             ->preload()
-                            ->multiple()
                             ->required()
-                            ->helperText('Select the role or roles assigned to this user.'),
+                            ->helperText(
+                                'Assign one primary role to this user.'
+                            ),
 
                         TextInput::make('password')
                             ->label('Password')
@@ -44,10 +54,12 @@ class UserForm
                             ->minLength(8)
                             ->maxLength(255)
                             ->required(
-                                fn (string $operation): bool => $operation === 'create'
+                                fn (string $operation): bool =>
+                                    $operation === 'create'
                             )
                             ->dehydrated(
-                                fn (?string $state): bool => filled($state)
+                                fn (?string $state): bool =>
+                                    filled($state)
                             )
                             ->autocomplete('new-password'),
                     ])
