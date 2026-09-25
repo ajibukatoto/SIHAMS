@@ -12,9 +12,25 @@ class CreateTicketComment extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        // Automatically set the logged-in user as the comment author.
         $data['user_id'] = Auth::id();
 
+        if (
+            ! (
+                Auth::user()?->hasAnyRole([
+                    'Super Admin',
+                    'ICT Manager',
+                    'ICT Technician',
+                ]) ?? false
+            )
+        ) {
+            $data['is_internal'] = false;
+        }
+
         return $data;
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
     }
 }
