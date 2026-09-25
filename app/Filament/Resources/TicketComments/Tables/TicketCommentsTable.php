@@ -23,7 +23,8 @@ class TicketCommentsTable
                 TextColumn::make('user.name')
                     ->label('Commented By')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->placeholder('Unknown'),
 
                 TextColumn::make('comment')
                     ->label('Comment')
