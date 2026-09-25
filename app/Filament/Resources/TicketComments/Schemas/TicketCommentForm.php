@@ -15,11 +15,16 @@ class TicketCommentForm
         return $schema
             ->components([
                 Section::make('Ticket Comment')
-                    ->description('Add a comment to a help desk ticket.')
+                    ->description(
+                        'Add a comment to a help desk ticket.'
+                    )
                     ->schema([
                         Select::make('help_desk_ticket_id')
                             ->label('Help Desk Ticket')
-                            ->relationship('ticket', 'ticket_number')
+                            ->relationship(
+                                name: 'ticket',
+                                titleAttribute: 'ticket_number'
+                            )
                             ->searchable()
                             ->preload()
                             ->required(),
@@ -33,7 +38,7 @@ class TicketCommentForm
                         Toggle::make('is_internal')
                             ->label('Internal Comment')
                             ->helperText(
-                                'Internal comments should only be visible to authorized ICT staff.'
+                                'Use this option for internal ICT staff communication.'
                             )
                             ->default(false),
                     ])
