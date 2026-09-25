@@ -47,14 +47,18 @@ class RecentTickets extends TableWidget
                     ->badge()
                     ->formatStateUsing(
                         fn (string $state): string =>
-                            str($state)->replace('_', ' ')->title()
+                            str($state)
+                                ->replace('_', ' ')
+                                ->title()
                     ),
 
                 TextColumn::make('status')
                     ->badge()
                     ->formatStateUsing(
                         fn (string $state): string =>
-                            str($state)->replace('_', ' ')->title()
+                            str($state)
+                                ->replace('_', ' ')
+                                ->title()
                     ),
 
                 TextColumn::make('technician.name')
@@ -70,4 +74,3 @@ class RecentTickets extends TableWidget
             ->paginated(false);
     }
 }
-
