@@ -2,9 +2,9 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\HelpDeskTicket;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class TicketActivityChart extends ChartWidget
 {
@@ -14,6 +14,8 @@ class TicketActivityChart extends ChartWidget
 
     protected function getData(): array
     {
+        $query = HelpDeskTicket::query();
+
         $labels = [];
         $data = [];
 
@@ -22,7 +24,7 @@ class TicketActivityChart extends ChartWidget
 
             $labels[] = $date->format('D');
 
-            $data[] = DB::table('help_desk_tickets')
+            $data[] = (clone $query)
                 ->whereDate('created_at', $date)
                 ->count();
         }
@@ -36,7 +38,6 @@ class TicketActivityChart extends ChartWidget
                     'tension' => 0.4,
                 ],
             ],
-
             'labels' => $labels,
         ];
     }
