@@ -2,8 +2,8 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\HelpDeskTicket;
 use Filament\Widgets\ChartWidget;
-use Illuminate\Support\Facades\DB;
 
 class TicketStatusChart extends ChartWidget
 {
@@ -23,10 +23,12 @@ class TicketStatusChart extends ChartWidget
             'cancelled' => 'Cancelled',
         ];
 
+        $query = HelpDeskTicket::query();
+
         $data = [];
 
         foreach (array_keys($statuses) as $status) {
-            $data[] = DB::table('help_desk_tickets')
+            $data[] = (clone $query)
                 ->where('status', $status)
                 ->count();
         }
