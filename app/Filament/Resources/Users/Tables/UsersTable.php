@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class UsersTable
 {
@@ -52,12 +53,20 @@ class UsersTable
             ])
 
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->visible(
+                        fn (): bool =>
+                            Auth::user()?->can('users.update') ?? false
+                    ),
             ])
 
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->visible(
+                            fn (): bool =>
+                                Auth::user()?->can('users.delete') ?? false
+                        ),
                 ]),
             ])
 
