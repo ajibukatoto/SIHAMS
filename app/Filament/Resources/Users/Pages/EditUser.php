@@ -9,33 +9,38 @@ class EditUser extends EditRecord
 {
     protected static string $resource = UserResource::class;
 
-    protected ?string $selectedRole = null;
+    protected string $selectedRole;
 
-    protected function mutateFormDataBeforeFill(array $data): array
-    {
-        $data['role'] = $this->record
-            ->getRoleNames()
-            ->first();
-
-        return $data;
-    }
-
-    protected function mutateFormDataBeforeSave(array $data): array
-    {
-        $this->selectedRole = $data['role'] ?? null;
+    protected function mutateFormDataBeforeSave(
+        array $data
+    ): array {
+        $this->selectedRole = $data['role'];
 
         unset($data['role']);
+
+        if (empty($data['password'])) {
+            unset($data['password']);
+        }
 
         return $data;
     }
 
     protected function afterSave(): void
     {
-        if ($this->selectedRole) {
-            $this->record->syncRoles([
-                $this->selectedRole,
-            ]);
-        }
+        $this->record->syncRoles([
+            $this->selectedRole,
+        ]);
+    }
+
+    protected function mutateFormDataBeforeFill(
+        array $data
+    ): array {
+        $data['role'] = $this->record
+            ->roles()
+            ->pluck('name')
+            ->first();
+
+        return $data;
     }
 
     protected function getRedirectUrl(): string
