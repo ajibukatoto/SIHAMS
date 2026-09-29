@@ -9,11 +9,12 @@ class CreateUser extends CreateRecord
 {
     protected static string $resource = UserResource::class;
 
-    protected ?string $selectedRole = null;
+    protected string $selectedRole;
 
-    protected function mutateFormDataBeforeCreate(array $data): array
-    {
-        $this->selectedRole = $data['role'] ?? null;
+    protected function mutateFormDataBeforeCreate(
+        array $data
+    ): array {
+        $this->selectedRole = $data['role'];
 
         unset($data['role']);
 
@@ -22,11 +23,9 @@ class CreateUser extends CreateRecord
 
     protected function afterCreate(): void
     {
-        if ($this->selectedRole) {
-            $this->record->syncRoles([
-                $this->selectedRole,
-            ]);
-        }
+        $this->record->syncRoles([
+            $this->selectedRole,
+        ]);
     }
 
     protected function getRedirectUrl(): string
