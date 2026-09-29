@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Models\User;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -56,7 +57,7 @@ class UsersTable
                 EditAction::make()
                     ->visible(
                         fn (): bool =>
-                            Auth::user()?->can('users.update') ?? false
+                            Auth::user()?->hasRole('Super Admin') ?? false
                     ),
             ])
 
@@ -65,7 +66,7 @@ class UsersTable
                     DeleteBulkAction::make()
                         ->visible(
                             fn (): bool =>
-                                Auth::user()?->can('users.delete') ?? false
+                                Auth::user()?->hasRole('Super Admin') ?? false
                         ),
                 ]),
             ])
