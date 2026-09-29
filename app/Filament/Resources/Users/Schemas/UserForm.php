@@ -15,9 +15,6 @@ class UserForm
         return $schema
             ->components([
                 Section::make('User Account Information')
-                    ->description(
-                        'Create and manage system user accounts and their assigned role.'
-                    )
                     ->schema([
                         TextInput::make('name')
                             ->label('Full Name')
@@ -28,40 +25,43 @@ class UserForm
                             ->label('Email Address')
                             ->email()
                             ->required()
-                            ->unique(ignoreRecord: true)
+                            ->unique(
+                                table: 'users',
+                                column: 'email',
+                                ignoreRecord: true
+                            )
                             ->maxLength(255),
 
+                        TextInput::make('password')
+                            ->label('Password')
+                            ->password()
+                            ->revealable()
+                            ->required(fn (string $operation): bool =>
+                                $operation === 'create'
+                            )
+                            ->minLength(8)
+                            ->confirmed(),
+
+                        TextInput::make('password_confirmation')
+                            ->label('Confirm Password')
+                            ->password()
+                            ->revealable()
+                            ->required(fn (string $operation): bool =>
+                                $operation === 'create'
+                            )
+                            ->dehydrated(false),
+
                         Select::make('role')
-                            ->label('Role')
+                            ->label('User Role')
                             ->options(
                                 Role::query()
-                                    ->where('guard_name', 'web')
                                     ->orderBy('name')
                                     ->pluck('name', 'name')
                                     ->toArray()
                             )
                             ->searchable()
                             ->preload()
-                            ->required()
-                            ->helperText(
-                                'Assign one primary role to this user.'
-                            ),
-
-                        TextInput::make('password')
-                            ->label('Password')
-                            ->password()
-                            ->revealable()
-                            ->minLength(8)
-                            ->maxLength(255)
-                            ->required(
-                                fn (string $operation): bool =>
-                                    $operation === 'create'
-                            )
-                            ->dehydrated(
-                                fn (?string $state): bool =>
-                                    filled($state)
-                            )
-                            ->autocomplete('new-password'),
+                            ->required(),
                     ])
                     ->columns(2),
             ]);
