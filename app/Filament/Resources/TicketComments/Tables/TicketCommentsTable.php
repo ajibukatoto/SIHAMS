@@ -2,18 +2,32 @@
 
 namespace App\Filament\Resources\TicketComments\Tables;
 
+use App\Models\TicketComment;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class TicketCommentsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(
+                fn ($query) =>
+                    $query->whereHas(
+                        'ticket',
+                        function ($ticketQuery): void {
+                            $ticketQuery->visibleTo(
+                                Auth::user()
+                            );
+                        }
+                    )
+            )
             ->columns([
                 TextColumn::make('ticket.ticket_number')
                     ->label('Ticket Number')
@@ -51,12 +65,18 @@ class TicketCommentsTable
             ])
             ->recordActions([
                 EditAction::make(),
+
+                DeleteAction::make()
+                    ->requiresConfirmation(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('created_at', 'desc');
+            ->defaultSort(
+                'created_at',
+                'desc'
+            );
     }
 }
