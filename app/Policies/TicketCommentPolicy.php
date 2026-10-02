@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\TicketComment;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class TicketCommentPolicy
 {
@@ -20,7 +21,10 @@ class TicketCommentPolicy
             return false;
         }
 
-        return $this->canAccessComment($user, $comment);
+        return $this->canAccessComment(
+            $user,
+            $comment
+        );
     }
 
     public function create(User $user): bool
@@ -36,7 +40,10 @@ class TicketCommentPolicy
             return false;
         }
 
-        return $this->canAccessComment($user, $comment);
+        return $this->canAccessComment(
+            $user,
+            $comment
+        );
     }
 
     public function delete(
@@ -47,8 +54,12 @@ class TicketCommentPolicy
             return false;
         }
 
-        return $user->hasRole('Super Admin')
-            || $user->hasRole('ICT Manager');
+        $roles = $this->getRoles($user);
+
+        return (
+            in_array('Super Admin', $roles, true) ||
+            in_array('ICT Manager', $roles, true)
+        );
     }
 
     public function restore(
@@ -75,22 +86,45 @@ class TicketCommentPolicy
             return false;
         }
 
+        $roles = $this->getRoles($user);
+
         if (
-            $user->hasRole('Super Admin') ||
-            $user->hasRole('ICT Manager') ||
-            $user->hasRole('Auditor')
+            in_array('Super Admin', $roles, true) ||
+            in_array('ICT Manager', $roles, true) ||
+            in_array('Auditor', $roles, true)
         ) {
             return true;
         }
 
-        if ($user->hasRole('ICT Technician')) {
+        if (in_array('ICT Technician', $roles, true)) {
             return $ticket->assigned_to === $user->id;
         }
 
-        if ($user->hasRole('Employee')) {
+        if (in_array('Employee', $roles, true)) {
             return $ticket->requester_id === $user->id;
         }
 
         return false;
+    }
+
+    private function getRoles(User $user): array
+    {
+        return DB::table('model_has_roles')
+            ->join(
+                'roles',
+                'roles.id',
+                '=',
+                'model_has_roles.role_id'
+            )
+            ->where(
+                'model_has_roles.model_id',
+                $user->id
+            )
+            ->where(
+                'model_has_roles.model_type',
+                User::class
+            )
+            ->pluck('roles.name')
+            ->toArray();
     }
 }
