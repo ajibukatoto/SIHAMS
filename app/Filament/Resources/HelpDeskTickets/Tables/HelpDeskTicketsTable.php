@@ -3,6 +3,10 @@
 namespace App\Filament\Resources\HelpDeskTickets\Tables;
 
 use App\Models\HelpDeskTicket;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -14,7 +18,8 @@ class HelpDeskTicketsTable
     {
         return $table
             ->modifyQueryUsing(
-                fn ($query) => $query->visibleTo(Auth::user())
+                fn ($query) =>
+                    $query->visibleTo(Auth::user())
             )
             ->columns([
                 TextColumn::make('ticket_number')
@@ -94,6 +99,20 @@ class HelpDeskTicketsTable
                         'other' => 'Other',
                     ]),
             ])
-            ->defaultSort('created_at', 'desc');
+            ->recordActions([
+                EditAction::make(),
+
+                DeleteAction::make()
+                    ->requiresConfirmation(),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ])
+            ->defaultSort(
+                'created_at',
+                'desc'
+            );
     }
 }
